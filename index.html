@@ -6,47 +6,7 @@
     <title>リンク集 - kinketsucom</title>
     <div id="yt_player" style="position:fixed; top:-100px; left:-100px; width:0; height:0;"></div>
 
-<script>
-    // 1. YouTube IFrame API の読み込み
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    var player;
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('yt_player', {
-            videoId: 'iB8iVNd3UMs', // 指定の動画ID
-            playerVars: {
-                'autoplay': 1,       // 自動再生
-                'loop': 1,           // ループ
-                'playlist': 'iB8iVNd3UMs', // 同じ動画をループさせる
-                'controls': 0,       // コントロール非表示
-                'disablekb': 1,      // キーボード操作無効
-                'rel': 0             // 関連動画非表示
-            },
-            events: {
-                'onReady': onPlayerReady
-            }
-        });
-    }
-
-    function onPlayerReady(event) {
-        // 最初はミュートで再生（ブラウザの自動再生ブロック回避）
-        event.target.mute();
-        event.target.playVideo();
-    }
-
-    // 2. ユーザーが画面をクリックした瞬間にミュート解除
-    // 初回の操作（セレクトボックス選択や印刷ボタン押しなど）で音が流れ始めます
-    window.addEventListener('click', function() {
-        if (player && player.isMuted()) {
-            player.unMute();
-            player.setVolume(100); // BGMなので音量は控えめ（15%）に設定
-            console.log("BGM Started");
-        }
-    }, { once: true });
-</script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -56,7 +16,7 @@
             color: #24292e;
         }
         .container {
-            max-width: 800px; /* 横並びのために少し幅を広げました */
+            max-width: 800px;
             margin: 0 auto;
         }
         h1 {
@@ -64,31 +24,32 @@
             margin-bottom: 40px;
         }
 
-        /* 横並びにするためのレイアウト設定 */
         .link-grid {
             display: flex;
             gap: 20px;
             justify-content: center;
-            flex-wrap: wrap; /* 画面が狭いときは折り返す */
+            flex-wrap: wrap;
         }
 
-        /* 各セクションのスタイル */
         .link-section {
-            flex: 1; /* 均等な幅に広がる */
-            min-width: 300px; /* これより狭くなると折り返す */
+            flex: 1;
+            min-width: 320px;
             border: 2px dashed #d1d5da;
             border-radius: 12px;
-            padding: 25px 20px;
+            padding: 30px 20px;
             background-color: #ffffff;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden; /* 穴がはみ出しても大丈夫なように */
         }
 
         .section-title {
             display: block;
-            margin-top: -40px;
+            margin-top: 1px;
             background: #f6f8fa;
             width: fit-content;
             margin-left: auto;
@@ -99,7 +60,58 @@
             font-size: 0.95rem;
         }
 
-        /* リンクボタンのスタイル */
+        /* --- 鼻デカ・アクション --- */
+        .nose-container {
+            position: relative;
+            width: 200px; /* 鼻の外側をデカくしました */
+            margin: 10px auto;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nose-svg {
+            width: 100%;
+            height: auto;
+            fill: #ffb6c1; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        /* 鼻の穴とリンク文字のグループ */
+        .nostril-group {
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* 左の穴の中心 / 右の穴の中心 */
+        .left-n  { transform-origin: 32px 32px; }
+        .right-n { transform-origin: 68px 32px; }
+
+        .nostril-bg {
+            fill: #333;
+        }
+
+        .nostril-text {
+            font-size: 5px;
+            fill: white;
+            opacity: 0;
+            text-anchor: middle;
+            font-weight: bold;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        /* ホバー：セクション全体に乗った時の動き */
+        .link-section:hover .nose-container {
+            transform: scale(1.5); /* 鼻全体が少しデカくなる */
+        }
+
+        .link-section:hover .nostril-group {
+            transform: scale(1.5); /* 穴と文字が一緒に爆発的にデカくなる */
+        }
+
+        .link-section:hover .nostril-text {
+            opacity: 1;
+        }
+
         .link-button {
             display: block;
             background-color: #ffffff;
@@ -117,24 +129,14 @@
         .link-button:hover {
             background-color: #0366d6;
             color: #ffffff;
-            border-color: #0366d6;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(3, 102, 214, 0.2);
         }
 
         .note {
             font-size: 0.85rem;
             color: #6a737d;
-            margin-top: 15px;
+            margin-top: 20px;
             line-height: 1.4;
-        }
-
-        /* スマホ向けの微調整 */
-        @media (max-width: 600px) {
-            .link-section {
-                flex: none;
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -154,14 +156,64 @@
 
             <div class="link-section">
                 <span class="section-title">-- はな --</span>
-                <a href="kafunsensing/kafunsensing.html" class="link-button">
-                    花粉データ抽出のやつ
-                </a>
-                <p class="note">Excelファイルから個々の学生データを<br>抽出して表示・印刷できます。</p>
+                
+                <div class="nose-container">
+                    <svg class="nose-svg" viewBox="0 0 100 65" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,40 Q5,10 50,10 Q95,10 95,40 Q95,60 50,60 Q5,60 5,40" stroke="#f08080" stroke-width="2" />
+                        
+                        <a href="kafunsensing/kafunsensing.html" class="nostril-group left-n">
+                            <ellipse class="nostril-bg" cx="32" cy="35" rx="8" ry="10" />
+                            <text x="32" y="37" class="nostril-text">花粉</text>
+                        </a>
+                        
+                        <a href="kafunsensing/kafunsensing.html" class="nostril-group right-n">
+                            <ellipse class="nostril-bg" cx="68" cy="35" rx="8" ry="10" />
+                            <text x="68" y="37" class="nostril-text">抽出</text>
+                        </a>
+                    </svg>
+                </div>
+
+                <p class="note"><b>鼻の穴をクリック！</b><br>Excelから個々の学生データを<br>抽出して表示・印刷できます。</p>
             </div>
         </div>
-
     </div>
 
 </body>
 </html>
+
+<!-- <script>
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt_player', {
+            videoId: 'iB8iVNd3UMs', 
+            playerVars: {
+                'autoplay': 1,
+                'loop': 1,
+                'playlist': 'iB8iVNd3UMs',
+                'controls': 0,
+                'disablekb': 1,
+                'rel': 0
+            },
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.mute();
+        event.target.playVideo();
+    }
+
+    window.addEventListener('click', function() {
+        if (player && player.isMuted()) {
+            player.unMute();
+            player.setVolume(15); 
+        }
+    }, { once: true });
+</script> -->
