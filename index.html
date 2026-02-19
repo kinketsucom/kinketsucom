@@ -44,7 +44,7 @@
             justify-content: space-between;
             position: relative;
             transition: all 0.3s ease;
-            overflow: hidden; /* 穴がはみ出しても大丈夫なように */
+            overflow: visible; /* 穴がはみ出しても大丈夫なように */
         }
 
         .section-title {
@@ -64,7 +64,7 @@
         .nose-container {
             position: relative;
             width: 200px; /* 鼻の外側をデカくしました */
-            margin: 10px auto;
+            margin: 50px auto;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -135,15 +135,41 @@
         .note {
             font-size: 0.85rem;
             color: #6a737d;
-            margin-top: 20px;
+            margin-top: 50px;
             line-height: 1.4;
         }
+/* --- 鼻水アニメーション（片方・雫形） --- */
+
+.snot-drop {
+    fill: #0077e6; /* 鼻水の色 */
+    opacity: 0;
+    transform-origin: 32px 35px; /* 左の鼻の穴を起点にする */
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+}
+
+/* ホバー時に雫が垂れてゆらゆらする */
+.link-section:hover .snot-drop {
+    opacity: 0.9;
+    animation: snot-drip-vibe 2.5s infinite ease-in-out;
+}
+
+@keyframes snot-drip-vibe {
+    0%, 100% {
+        /* 初期位置：少しだけ出ている */
+        transform: translateY(10px) scale(1) rotate(-1deg);
+    }
+    50% {
+        /* 最大に垂れ下がった状態：長く伸びて少し揺れる */
+        transform: translateY(10px) scale(1.2, 1.5) rotate(2deg);
+    }
+}
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>kinketsucom Portal ページのどこかをクリックしてね</h1>
+        <h1>kinketsucom Portal</h1>
 
         <div class="link-grid">
             <div class="link-section">
@@ -157,21 +183,23 @@
             <div class="link-section">
                 <span class="section-title">-- はな --</span>
                 
-                <div class="nose-container">
-                    <svg class="nose-svg" viewBox="0 0 100 65" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5,40 Q5,10 50,10 Q95,10 95,40 Q95,60 50,60 Q5,60 5,40" stroke="#f08080" stroke-width="2" />
-                        
-                        <a href="kafunsensing/kafunsensing.html" class="nostril-group left-n">
-                            <ellipse class="nostril-bg" cx="32" cy="35" rx="8" ry="10" />
-                            <text x="32" y="37" class="nostril-text">花粉</text>
-                        </a>
-                        
-                        <a href="kafunsensing/kafunsensing.html" class="nostril-group right-n">
-                            <ellipse class="nostril-bg" cx="68" cy="35" rx="8" ry="10" />
-                            <text x="68" y="37" class="nostril-text">抽出</text>
-                        </a>
-                    </svg>
-                </div>
+<div class="nose-container">
+    <svg class="nose-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5,40 Q5,10 50,10 Q95,10 95,40 Q95,60 50,60 Q5,60 5,40" stroke="#f08080" stroke-width="2" />
+        
+        <a href="kafunsensing/kafunsensing.html" class="nostril-group left-n">
+            <ellipse class="nostril-bg" cx="32" cy="35" rx="8" ry="10" />
+            <text x="32" y="37" class="nostril-text">花粉</text>
+        </a>
+        
+        <a href="kafunsensing/kafunsensing.html" class="nostril-group right-n">
+            <ellipse class="nostril-bg" cx="68" cy="35" rx="8" ry="10" />
+            <text x="68" y="37" class="nostril-text">抽出</text>
+        </a>
+
+        <path class="snot-drop" d="M32,35 C32,35 27,42 27,47 C27,51 29,54 32,54 C35,54 37,51 37,47 C37,42 32,35 32,35 Z" />
+    </svg>
+</div>
 
                 <p class="note"><b>鼻の穴をクリック！</b><br>Excelから個々の学生データを<br>抽出して表示・印刷できます。</p>
             </div>
