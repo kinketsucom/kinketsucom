@@ -6,7 +6,6 @@
     <title>リンク集 - kinketsucom</title>
     <div id="yt_player" style="position:fixed; top:-100px; left:-100px; width:0; height:0;"></div>
 
-
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -33,7 +32,7 @@
 
         .link-section {
             flex: 1;
-            min-width: 320px;
+            min-width: 340px; /* 少し幅を広げました */
             border: 2px dashed #d1d5da;
             border-radius: 12px;
             padding: 30px 20px;
@@ -41,75 +40,46 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             position: relative;
             transition: all 0.3s ease;
-            overflow: visible; /* 穴がはみ出しても大丈夫なように */
         }
 
         .section-title {
             display: block;
-            margin-top: 1px;
+            margin-bottom: 20px;
             background: #f6f8fa;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
-            padding: 0 15px;
+            padding: 2px 15px;
             font-weight: bold;
             color: #586069;
             font-size: 0.95rem;
+            border-radius: 4px;
         }
 
-        /* --- 鼻デカ・アクション --- */
-        .nose-container {
-            position: relative;
-            width: 200px; /* 鼻の外側をデカくしました */
-            margin: 50px auto;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* --- 説明文のスタイル --- */
+        .repo-info {
+            text-align: left; /* 説明文は左寄せが読みやすい */
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #fafbfc;
+            border-radius: 6px;
+            border: 1px solid #eee;
         }
-
-        .nose-svg {
-            width: 100%;
-            height: auto;
-            fill: #ffb6c1; 
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        .info-row {
+            margin-bottom: 5px;
+            display: flex;
         }
-
-        /* 鼻の穴とリンク文字のグループ */
-        .nostril-group {
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* 左の穴の中心 / 右の穴の中心 */
-        .left-n  { transform-origin: 32px 32px; }
-        .right-n { transform-origin: 68px 32px; }
-
-        .nostril-bg {
-            fill: #333;
-        }
-
-        .nostril-text {
-            font-size: 5px;
-            fill: white;
-            opacity: 0;
-            text-anchor: middle;
+        .info-label {
             font-weight: bold;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
+            color: #0366d6;
+            min-width: 50px;
+            flex-shrink: 0;
         }
-
-        /* ホバー：セクション全体に乗った時の動き */
-        .link-section:hover .nose-container {
-            transform: scale(1.5); /* 鼻全体が少しデカくなる */
-        }
-
-        .link-section:hover .nostril-group {
-            transform: scale(1.5); /* 穴と文字が一緒に爆発的にデカくなる */
-        }
-
-        .link-section:hover .nostril-text {
-            opacity: 1;
+        .info-content {
+            color: #444;
         }
 
         .link-button {
@@ -117,13 +87,13 @@
             background-color: #ffffff;
             color: #0366d6;
             border: 1px solid #e1e4e8;
-            padding: 15px;
+            padding: 12px;
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
             transition: all 0.2s ease;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .link-button:hover {
@@ -132,38 +102,54 @@
             transform: translateY(-2px);
         }
 
-        .note {
-            font-size: 0.85rem;
-            color: #6a737d;
-            margin-top: 50px;
-            line-height: 1.4;
+        /* --- 鼻デカ・アクション --- */
+        .nose-container {
+            position: relative;
+            width: 180px;
+            margin: 30px auto;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-/* --- 鼻水アニメーション（片方・雫形） --- */
+        .nose-svg {
+            width: 100%;
+            height: auto;
+            fill: #ffb6c1; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        .nostril-group { cursor: pointer; transition: all 0.4s; }
+        .left-n  { transform-origin: 32px 32px; }
+        .right-n { transform-origin: 68px 32px; }
+        .nostril-bg { fill: #333; }
+        .nostril-text {
+            font-size: 5px; fill: white; opacity: 0;
+            text-anchor: middle; font-weight: bold;
+            transition: opacity 0.2s ease; pointer-events: none;
+        }
 
-.snot-drop {
-    fill: #0077e6; /* 鼻水の色 */
-    opacity: 0;
-    transform-origin: 32px 35px; /* 左の鼻の穴を起点にする */
-    transition: opacity 0.7s ease;
-    pointer-events: none;
-}
+        .link-section:hover .nose-container { transform: scale(1.3); }
+        .link-section:hover .nostril-group { transform: scale(1.4); }
+        .link-section:hover .nostril-text { opacity: 1; }
 
-/* ホバー時に雫が垂れてゆらゆらする */
-.link-section:hover .snot-drop {
-    opacity: 0.9;
-    animation: snot-drip-vibe 2.5s infinite ease-in-out;
-}
+        .snot-drop {
+            fill: #0077e6; opacity: 0;
+            transform-origin: 32px 35px;
+            transition: opacity 0.7s ease;
+            pointer-events: none;
+        }
+        .link-section:hover .snot-drop {
+            opacity: 0.9;
+            animation: snot-drip-vibe 2.5s infinite ease-in-out;
+        }
+        @keyframes snot-drip-vibe {
+            0%, 100% { transform: translateY(10px) scale(1) rotate(-1deg); }
+            50% { transform: translateY(10px) scale(1.2, 1.5) rotate(2deg); }
+        }
 
-@keyframes snot-drip-vibe {
-    0%, 100% {
-        /* 初期位置：少しだけ出ている */
-        transform: translateY(10px) scale(1) rotate(-1deg);
-    }
-    50% {
-        /* 最大に垂れ下がった状態：長く伸びて少し揺れる */
-        transform: translateY(10px) scale(1.2, 1.5) rotate(2deg);
-    }
-}
+        .note-footer {
+            font-size: 0.8rem;
+            color: #6a737d;
+            margin-top: auto;
+            padding-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -174,74 +160,66 @@
         <div class="link-grid">
             <div class="link-section">
                 <span class="section-title">-- リポジトリ --</span>
-                <a href="https://github.com/kinketsucom/MontoreCopy" class="link-button" target="_blank">
-                    MontoreCopy リポジトリへ
-                </a>
-                <p class="note">Private設定のため、アクセスには<br>GitHubアカウントの権限許可が必要です。</p>
+                
+                <div class="repo-info">
+                    <div class="info-row">
+                        <span class="info-label">タイトル:</span>
+                        <span class="info-content">MontoreCopy</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">目的:</span>
+                        <span class="info-content">Private設定。特定環境のクローン管理。</span>
+                    </div>
+                </div>
+                <a href="https://github.com/kinketsucom/MontoreCopy" class="link-button" target="_blank">GitHubを開く</a>
+                <p class="note-footer">※private repository</p>          
+                <hr style="border: 1; border-top: 4px solid #00000014; margin: 15px 0;">
+
+                <div class="repo-info">
+                    <div class="info-row">
+                        <span class="info-label">タイトル:</span>
+                        <span class="info-content">MoleMelanoma</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">目的:</span>
+                        <span class="info-content">SAMセグメンテーションを用いたほくろ・メラノーマの画像解析。</span>
+                    </div>
+                </div>
+                <a href="https://github.com/kinketsucom/MoleMelanoma/tree/master" class="link-button" target="_blank">GitHubを開く</a>
             </div>
 
             <div class="link-section">
                 <span class="section-title">-- はな --</span>
                 
-<div class="nose-container">
-    <svg class="nose-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5,40 Q5,10 50,10 Q95,10 95,40 Q95,60 50,60 Q5,60 5,40" stroke="#f08080" stroke-width="2" />
-        
-        <a href="kafunsensing/kafunsensing.html" class="nostril-group left-n">
-            <ellipse class="nostril-bg" cx="32" cy="35" rx="8" ry="10" />
-            <text x="32" y="37" class="nostril-text">花粉</text>
-        </a>
-        
-        <a href="kafunsensing/kafunsensing.html" class="nostril-group right-n">
-            <ellipse class="nostril-bg" cx="68" cy="35" rx="8" ry="10" />
-            <text x="68" y="37" class="nostril-text">抽出</text>
-        </a>
+                <div class="nose-container">
+                    <svg class="nose-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,40 Q5,10 50,10 Q95,10 95,40 Q95,60 50,60 Q5,60 5,40" stroke="#f08080" stroke-width="2" />
+                        <a href="kafunsensing/kafunsensing.html" class="nostril-group left-n">
+                            <ellipse class="nostril-bg" cx="32" cy="35" rx="8" ry="10" />
+                            <text x="32" y="37" class="nostril-text">花粉</text>
+                        </a>
+                        <a href="kafunsensing/kafunsensing.html" class="nostril-group right-n">
+                            <ellipse class="nostril-bg" cx="68" cy="35" rx="8" ry="10" />
+                            <text x="68" y="37" class="nostril-text">抽出</text>
+                        </a>
+                        <path class="snot-drop" d="M32,35 C32,35 27,42 27,47 C27,51 29,54 32,54 C35,54 37,51 37,47 C37,42 32,35 32,35 Z" />
+                    </svg>
+                </div>
 
-        <path class="snot-drop" d="M32,35 C32,35 27,42 27,47 C27,51 29,54 32,54 C35,54 37,51 37,47 C37,42 32,35 32,35 Z" />
-    </svg>
-</div>
-
-                <p class="note"><b>鼻の穴をクリック！</b><br>Excelから個々の学生データを<br>抽出して表示・印刷できます。</p>
+                <div class="repo-info">
+                    <div class="info-row">
+                        <span class="info-label">タイトル:</span>
+                        <span class="info-content">Kafun Sensing</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">目的:</span>
+                        <span class="info-content">Excelから学生データを抽出し、表示・印刷。</span>
+                    </div>
+                </div>
+                <p class="note-footer">※鼻の穴がリンクになっています。</p>
             </div>
         </div>
     </div>
 
 </body>
 </html>
-
-<!-- <script>
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    var player;
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('yt_player', {
-            videoId: 'iB8iVNd3UMs', 
-            playerVars: {
-                'autoplay': 1,
-                'loop': 1,
-                'playlist': 'iB8iVNd3UMs',
-                'controls': 0,
-                'disablekb': 1,
-                'rel': 0
-            },
-            events: {
-                'onReady': onPlayerReady
-            }
-        });
-    }
-
-    function onPlayerReady(event) {
-        event.target.mute();
-        event.target.playVideo();
-    }
-
-    window.addEventListener('click', function() {
-        if (player && player.isMuted()) {
-            player.unMute();
-            player.setVolume(15); 
-        }
-    }, { once: true });
-</script> -->
